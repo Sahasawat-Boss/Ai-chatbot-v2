@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from 'react';
 import ChatMessage from '@/components/ChatMessage';
 import ChatInput from '@/components/ChatInput';
+import RefreshButton from "@/components/RefreshButton";
 import ClearChatButton from '@/components/ClearChatButton';
 import { FaBars } from "react-icons/fa";
 
@@ -84,12 +85,12 @@ export default function Home() {
   };
 
   return (
-    <main className="flex flex-col h-screen bg-gray-200">
+    <main className="flex flex-col h-screen bg-gray-300">
       {/* Header Section */}
-      <div className="bg-gray-600 text-white p-4 flex item-center shadow-lg">
+      <div className="bg-gray-700 text-white p-4 flex item-center shadow-lg">
         <div className='min-w-[90%]'>
           <h1 className="text-2xl font-bold">AI Chatbot v.2</h1>
-          <h2 className="text-lg font-semibold ml-8">Google Gemini Free Key</h2>
+          <h2 className="text-sm ml-14">Google Gemini Free Key</h2>
           <hr className="my-1" />
           <h3>Produced by @boss_emeraldd</h3>
         </div>
@@ -118,9 +119,12 @@ export default function Home() {
       </div>
 
       {/* Chat Input & Button Section */}
-      <div className="bg-gray-500 p-4 flex flex-col">
+      <div className="bg-gray-700 p-4 flex flex-col">
         <ChatInput onSendMessage={handleSendMessage} isLoading={isLoading} />
-        <ClearChatButton onClearChat={handleClearChat} />
+        <div className='flex justify-center gap-2'>
+          <RefreshButton />
+          <ClearChatButton onClearChat={handleClearChat} />
+        </div>
       </div>
 
     </main>

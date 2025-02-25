@@ -1,6 +1,4 @@
 import React, { useState } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPaperPlane } from '@fortawesome/free-solid-svg-icons';
 
 interface ChatInputProps {
     onSendMessage: (message: string) => void;
@@ -34,7 +32,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage, isLoading }) => {
                     }`}
                 disabled={isLoading}
             >
-                <FontAwesomeIcon icon={faPaperPlane} />
+                Ask AI
             </button>
         </form>
     );
