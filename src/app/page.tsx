@@ -17,7 +17,7 @@ export default function Home() {
   const [messages, setMessages] = useState<Message[]>([
     {
       role: 'assistant',
-      content: "Hello! I'm AI ChatBot, Ask me anything!",
+      content: "Hello! I'm AI Chatbot, Ask me anything!",
       isUser: false
     }
   ]);
