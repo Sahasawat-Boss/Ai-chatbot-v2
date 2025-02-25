@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from 'react';
 import ChatMessage from '@/components/ChatMessage';
 import ChatInput from '@/components/ChatInput';
 import ClearChatButton from '@/components/ClearChatButton';
+import { FaBars } from "react-icons/fa";
 
 interface Message {
   role: 'user' | 'assistant';
@@ -31,22 +32,17 @@ export default function Home() {
   }, [messages]);
 
   const handleSendMessage = async (message: string) => {
-    // Add user message to chat
     const userMessage: Message = { role: 'user', content: message, isUser: true };
     setMessages(prev => [...prev, userMessage]);
 
-    // Set loading state
     setIsLoading(true);
 
     try {
-      // Send message to API
       const response = await fetch('/api/chat', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          messages: [...messages, userMessage]
+          messages: [userMessage], // ✅ Only send user messages, ignore assistant's initial message
         }),
       });
 
@@ -56,7 +52,6 @@ export default function Home() {
 
       const data = await response.json();
 
-      // Add AI response to chat
       const aiMessage: Message = {
         role: 'assistant',
         content: data.response,
@@ -67,24 +62,22 @@ export default function Home() {
     } catch (error) {
       console.error('Error sending message:', error);
 
-      // Add fallback error message from AI
-      const errorMessage: Message = {
+      setMessages(prev => [...prev, {
         role: 'assistant',
         content: "Oops! Something went wrong. Please try again later.",
         isUser: false
-      };
-
-      setMessages(prev => [...prev, errorMessage]);
+      }]);
     } finally {
       setIsLoading(false);
     }
   };
 
+
   const handleClearChat = () => {
     setMessages([
       {
         role: 'assistant',
-        content: "So sad you clear our chat, chat with me again!",
+        content: "I'm So sad you clear our chat, Try chatting with me again!",
         isUser: false
       }
     ]);
@@ -93,11 +86,16 @@ export default function Home() {
   return (
     <main className="flex flex-col h-screen bg-gray-200">
       {/* Header Section */}
-      <div className="bg-gray-600 text-white p-4">
-        <h1 className="text-2xl font-bold">AI Chatbot v.2</h1>
-        <h2 className="text-lg font-semibold ml-8">Google Gemini Free Key</h2>
-        <hr className="my-1" />
-        <h3>Produced by @boss_emeraldd</h3>
+      <div className="bg-gray-600 text-white p-4 flex item-center shadow-lg">
+        <div className='min-w-[90%]'>
+          <h1 className="text-2xl font-bold">AI Chatbot v.2</h1>
+          <h2 className="text-lg font-semibold ml-8">Google Gemini Free Key</h2>
+          <hr className="my-1" />
+          <h3>Produced by @boss_emeraldd</h3>
+        </div>
+        <div>
+          <FaBars className='w-6 h-6 hover:text-red-500' />
+        </div>
       </div>
 
       {/* Chat Messages Section */}
@@ -110,8 +108,8 @@ export default function Home() {
             <div className="bg-gray-200 text-gray-800 p-3 rounded-lg">
               <div className="flex space-x-2">
                 <div className="w-2 h-2 bg-gray-600 rounded-full animate-bounce"></div>
-                <div className="w-2 h-2 bg-gray-600 rounded-full animate-bounce" style={{ animationDelay: '0.3s' }}></div>
-                <div className="w-2 h-2 bg-gray-600 rounded-full animate-bounce" style={{ animationDelay: '0.5s' }}></div>
+                <div className="w-2 h-2 bg-gray-600 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                <div className="w-2 h-2 bg-gray-600 rounded-full animate-bounce" style={{ animationDelay: '0.4s' }}></div>
               </div>
             </div>
           </div>
@@ -119,11 +117,12 @@ export default function Home() {
         <div ref={messagesEndRef} />
       </div>
 
-      {/* Chat Input & Clear Button Section */}
-      <div className="bg-gray-500 p-4 flex items-center justify-between">
-        <ClearChatButton onClearChat={handleClearChat} />
+      {/* Chat Input & Button Section */}
+      <div className="bg-gray-500 p-4 flex flex-col">
         <ChatInput onSendMessage={handleSendMessage} isLoading={isLoading} />
+        <ClearChatButton onClearChat={handleClearChat} />
       </div>
+
     </main>
   );
 }

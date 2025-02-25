@@ -1,21 +1,38 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 
-// Define the expected message structure
+// Define Message Type
 interface Message {
     role: 'user' | 'assistant';
     content: string;
 }
 
-// Initialize the Google Generative AI with your API key
-const genAI = new GoogleGenerativeAI(process.env.GOOGLE_GEMINI_API_KEY || '');
+// Ensure correct runtime
+export const runtime = 'nodejs';
+
+// Initialize Google Generative AI
+const apiKey = process.env.GOOGLE_GEMINI_API_KEY;
+if (!apiKey) {
+    console.error("❌ Missing GOOGLE_GEMINI_API_KEY in environment variables.");
+}
+
+const genAI = new GoogleGenerativeAI(apiKey || '');
 
 export async function POST(req: NextRequest) {
     try {
-        // Get messages from request
+        // Parse request body
         const { messages }: { messages: Message[] } = await req.json();
 
-        // Format conversation history for Gemini
+        if (!messages || !Array.isArray(messages) || messages.length === 0) {
+            throw new Error("Invalid request: No messages provided.");
+        }
+
+        // Ensure the first message is from the user
+        if (messages[0].role !== 'user') {
+            throw new Error("First message must be from the user.");
+        }
+
+        // Format messages for Google Gemini API
         const formattedMessages = messages.map((msg) => ({
             role: msg.role === 'user' ? 'user' : 'model',
             parts: [{ text: msg.content }]
@@ -26,7 +43,7 @@ export async function POST(req: NextRequest) {
 
         // Create a chat session
         const chat = model.startChat({
-            history: formattedMessages.slice(0, -1), // Send previous messages except the last one
+            history: formattedMessages.slice(0, -1),
             generationConfig: {
                 temperature: 0.7,
                 topP: 0.9,
@@ -35,19 +52,33 @@ export async function POST(req: NextRequest) {
             },
         });
 
-        // Get the last message from the user
+        // Get the last message (must be user input)
         const lastMessage = messages[messages.length - 1].content;
 
-        // Generate a response
+        console.log("🟢 Sending user message:", lastMessage);
+
+        // Generate response
         const result = await chat.sendMessage(lastMessage);
         const response = await result.response;
-        const text = response?.candidates?.[0]?.content || "I'm sorry, I couldn't generate a response.";
 
-        return NextResponse.json({ response: text });
+        if (!response || !response.candidates || response.candidates.length === 0) {
+            throw new Error("No valid response from Gemini API.");
+        }
+
+        // Extract AI response text while handling potential undefined values
+        const aiResponseText = response.candidates[0]?.content?.parts
+            ?.map((part) => ('text' in part && typeof part.text === 'string' ? part.text : ''))
+            .join(' ') || "I'm sorry, I couldn't generate a response.";
+
+        console.log("🤖 AI Response:", aiResponseText);
+
+        return NextResponse.json({ response: aiResponseText });
+
     } catch (error) {
-        console.error("Error in chat API:", error);
+        console.error("❌ Chat API Error:", error);
+
         return NextResponse.json(
-            { error: "Failed to process your request" },
+            { error: error instanceof Error ? error.message : "Failed to process your request" },
             { status: 500 }
         );
     }
