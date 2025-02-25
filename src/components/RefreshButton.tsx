@@ -11,7 +11,7 @@ const RefreshButton: React.FC = () => {
     return (
         <button
             onClick={handleRefresh}
-            className="flex justify-center items-center gap-1 w-fit px-2 py-1 bg-gray-700 text-white rounded hover:bg-gray-600 transition"
+            className="flex justify-center items-center gap-1 w-fit px-2 py-1 bg-gray-700 text-white rounded hover:bg-gray-600 transition animate-fade-in-left"
         >
             <IoMdRefresh />Refresh Page
         </button>

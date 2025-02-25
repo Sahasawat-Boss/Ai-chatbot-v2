@@ -17,7 +17,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage, isLoading }) => {
     };
 
     return (
-        <form onSubmit={handleSubmit} className="flex items-center p-4">
+        <form onSubmit={handleSubmit} className="flex items-center py-5 px-8 animate-fade-in-up">
             <input
                 type="text"
                 value={message}
@@ -28,7 +28,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage, isLoading }) => {
             />
             <button
                 type="submit"
-                className={`px-4 py-2 bg-gray-600 text-white rounded-r-lg ${isLoading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-blue-600'
+                className={`px-5 py-2 bg-gray-600 text-white rounded-r-lg ${isLoading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-blue-600'
                     }`}
                 disabled={isLoading}
             >

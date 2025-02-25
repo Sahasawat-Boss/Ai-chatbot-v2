@@ -5,7 +5,7 @@ import ChatMessage from '@/components/ChatMessage';
 import ChatInput from '@/components/ChatInput';
 import RefreshButton from "@/components/RefreshButton";
 import ClearChatButton from '@/components/ClearChatButton';
-import { FaBars } from "react-icons/fa";
+import ProfileIcon from "@/components/ProfileIcon";
 
 interface Message {
   role: 'user' | 'assistant';
@@ -65,7 +65,7 @@ export default function Home() {
 
       setMessages(prev => [...prev, {
         role: 'assistant',
-        content: "Oops! Something went wrong. Please try again later.",
+        content: "API has request limits, Please try again later",
         isUser: false
       }]);
     } finally {
@@ -78,7 +78,7 @@ export default function Home() {
     setMessages([
       {
         role: 'assistant',
-        content: "I'm So sad you clear our chat, Try chatting with me again!",
+        content: "Chat is cleared, Try chatting with me again!",
         isUser: false
       }
     ]);
@@ -87,20 +87,19 @@ export default function Home() {
   return (
     <main className="flex flex-col h-screen bg-gray-300">
       {/* Header Section */}
-      <div className="bg-gray-700 text-white p-4 flex item-center shadow-lg">
-        <div className='min-w-[90%]'>
-          <h1 className="text-2xl font-bold">AI Chatbot v.2</h1>
-          <h2 className="text-sm ml-14">Google Gemini Free Key</h2>
+      <div className="bg-gray-700 text-white p-4 flex shadow-lg">
+        <div className='min-w-[80%]'>
+          <h1 className="text-2xl font-bold animate-fade-in-down">AI Chatbot v.2</h1>
           <hr className="my-1" />
-          <h3>Produced by @boss_emeraldd</h3>
+          <h3 className="text-center animate-fade-in-down">Created by @boss_emeraldd</h3>
         </div>
-        <div>
-          <FaBars className='w-6 h-6 hover:text-red-500' />
+        <div className='w-full flex item-center justify-center'>
+          <ProfileIcon />
         </div>
       </div>
 
       {/* Chat Messages Section */}
-      <div className="flex-grow overflow-y-scroll py-3 px-7">
+      <div className="flex-grow overflow-y-auto py-3 px-7 animate-fade-in-left">
         {messages.map((message, index) => (
           <ChatMessage key={index} message={message.content} isUser={message.isUser} />
         ))}
@@ -121,7 +120,7 @@ export default function Home() {
       {/* Chat Input & Button Section */}
       <div className="bg-gray-700 p-4 flex flex-col">
         <ChatInput onSendMessage={handleSendMessage} isLoading={isLoading} />
-        <div className='flex justify-center gap-2'>
+        <div className='flex justify-center gap-2 pb-5'>
           <RefreshButton />
           <ClearChatButton onClearChat={handleClearChat} />
         </div>
