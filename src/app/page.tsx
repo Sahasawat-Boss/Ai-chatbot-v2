@@ -24,10 +24,12 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
+  //Function to ScrolltoButtom
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
+  //runs scrollToBottom() every time the messages state changes.
   useEffect(() => {
     scrollToBottom();
   }, [messages]);

@@ -3,7 +3,7 @@ import Image from "next/image";
 
 const ProfileMenu = () => {
     const [isOpen, setIsOpen] = useState(false);
-    const menuRef = useRef<HTMLDivElement>(null);
+    const menuRef = useRef<HTMLDivElement>(null); // creates a reference to a <div> element.
 
     const toggleMenu = () => {
         setIsOpen((prev) => !prev);
