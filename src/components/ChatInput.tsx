@@ -23,12 +23,12 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage, isLoading }) => {
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
                 placeholder="Type your message..."
-                className="flex-grow px-4 py-2 rounded-l-lg border focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="flex-grow px-5 py-2 rounded-xl rounded-r-none focus:outline-none focus:ring-2 focus:ring-blue-500"
                 disabled={isLoading}
             />
             <button
                 type="submit"
-                className={`px-5 py-2 bg-gray-600 text-white rounded-r-lg ${isLoading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-blue-600'
+                className={`px-5 py-2 bg-gray-600 rounded-xl rounded-l-none text-white rounded-r-lg ${isLoading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-blue-600'
                     }`}
                 disabled={isLoading}
             >

@@ -67,7 +67,7 @@ export default function Home() {
 
       setMessages(prev => [...prev, {
         role: 'assistant',
-        content: "API has request limits, Please try again later",
+        content: "API has request limits, Contact Boss for implement this app 😂",
         isUser: false
       }]);
     } finally {
@@ -102,7 +102,7 @@ export default function Home() {
         </div>
 
         {/* Chat Messages Section */}
-        <div className="flex-grow overflow-y-auto py-3 px-7 animate-fade-in-left">
+        <div className="flex-grow overflow-y-auto py-3 px-7 animate-fade-in">
           {messages.map((message, index) => (
             <ChatMessage key={index} message={message.content} isUser={message.isUser} />
           ))}

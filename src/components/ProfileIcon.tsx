@@ -3,7 +3,8 @@ import Image from "next/image";
 
 const ProfileMenu = () => {
     const [isOpen, setIsOpen] = useState(false);
-    const menuRef = useRef<HTMLDivElement>(null); // creates a reference to a <div> element.
+    const [showModal, setShowModal] = useState(false);
+    const menuRef = useRef<HTMLDivElement>(null);
 
     const toggleMenu = () => {
         setIsOpen((prev) => !prev);
@@ -24,6 +25,15 @@ const ProfileMenu = () => {
         return () => document.removeEventListener("mousedown", handleClickOutside);
     }, [isOpen]);
 
+    const openModal = () => {
+        setShowModal(true);
+        setIsOpen(false); // Close menu when opening modal
+    };
+
+    const closeModal = () => {
+        setShowModal(false);
+    };
+
     return (
         <div className="relative" ref={menuRef}>
             {/* Profile Picture Button */}
@@ -41,13 +51,26 @@ const ProfileMenu = () => {
             {isOpen && (
                 <div className="absolute right-0 mt-2 w-52 bg-gray-800 text-white rounded-lg shadow-lg">
                     <ul className="p-2">
-                        <li className="p-2 rounded cursor-pointer">(Gemini Free API Key)</li>
-                        <li className="p-2 hover:bg-gray-700 rounded cursor-pointer">Settings</li>
+                        <li className="p-2 rounded cursor-pointer">(Gemini Free API Key)</li>                  
+                        <li onClick={openModal} className="p-2 hover:bg-gray-700 rounded cursor-pointer">Upgrade Plan?</li>
                         <hr className="border-gray-600 my-1" />
-                        <li className="p-2 hover:bg-gray-700 rounded cursor-pointer">Upgrade Plan</li>
-                        <hr className="border-gray-600 my-1" />
-                        <li className="p-2 hover:bg-red-600 rounded cursor-pointer">Log out</li>
+                        <li onClick={openModal} className="p-2 hover:bg-red-600 rounded cursor-pointer">Log out</li>
                     </ul>
+                </div>
+            )}
+
+            {/* Modal */}
+            {showModal && (
+                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+                    <div className="bg-white text-black p-10 rounded-lg shadow-lg text-center">
+                        <p className="text-lg font-semibold">Contact Boss for implementing this app 😂</p>
+                        <button 
+                            onClick={closeModal} 
+                            className="mt-4 bg-gray-600 hover:bg-gray-400 text-white font-bold py-2 px-4 rounded"
+                        >
+                            Close
+                        </button>
+                    </div>
                 </div>
             )}
         </div>
